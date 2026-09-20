@@ -45,7 +45,7 @@ class SyncService:
         changed_at = '2000-01-01'
 
         if metadata.last_changed_at is not None:
-            changed_at = metadata.last_changed_at.isoformat()
+            changed_at = metadata.last_changed_at.date().isoformat()
 
         paginator = EventsPaginator(
             self.client,
@@ -58,7 +58,7 @@ class SyncService:
             async for event_data in paginator:
                 place = await self._sync_place(event_data['place'])
 
-                event = await self.event_repository.get(
+                event = await self.event_repository.get_event(
                     UUID(event_data['id'])
                 )
 

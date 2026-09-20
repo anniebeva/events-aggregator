@@ -24,7 +24,14 @@ class EventRepository:
 
         result = await self.session.execute(query)
 
-        return result.one_or_none()
+        return result.first()
+
+    async def get_event(self, event_id: UUID):
+        """Get an event by ID"""
+        result = await self.session.execute(
+            select(Event).where(Event.id == event_id)
+        )
+        return result.scalar_one_or_none()
 
     async def get_list(
             self,
