@@ -144,7 +144,6 @@ class SyncService:
         return Event(
             id=UUID(event_data['id']),
             name=event_data['name'],
-            description=event_data['description'],
             event_time=datetime.fromisoformat(
                 event_data['event_time']
             ),
@@ -162,7 +161,7 @@ class SyncService:
             status_changed_at=datetime.fromisoformat(
                 event_data['status_changed_at']
             ),
-            place=place,
+            place_id=place.id,
         )
 
     def _update_event(
@@ -172,7 +171,6 @@ class SyncService:
     ):
         """Update an existing Event model with Provider data"""
         event.name = event_data['name']
-        event.description = event_data['description']
         event.event_time = datetime.fromisoformat(
             event_data['event_time']
         )

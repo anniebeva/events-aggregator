@@ -20,6 +20,14 @@ class EventsProviderClient:
         response.raise_for_status()
         return response.json()
 
+    async def events_page(self, url: str):
+        """Get an events page using the Provider pagination URL"""
+        url = url.replace('http://', 'https://', 1)
+
+        response = await self.client.get(url)
+        response.raise_for_status()
+        return response.json()
+
     async def seats(self, event_id: str):
         """Get available seats for an event"""
         response = await self.client.get(

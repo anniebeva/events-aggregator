@@ -12,7 +12,6 @@ class Event(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
-    description: Mapped[str] = mapped_column(String)
     place_id: Mapped[UUID] = mapped_column(ForeignKey('places.id'))
     event_time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     registration_deadline: Mapped[datetime] = mapped_column(DateTime(timezone=True))
