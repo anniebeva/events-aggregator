@@ -64,9 +64,6 @@ async def get_events(
             'registration_deadline': event.registration_deadline,
             'status': event.status,
             'number_of_visitors': event.number_of_visitors,
-            'changed_at': event.changed_at,
-            'created_at': event.created_at,
-            'status_changed_at': event.status_changed_at,
         }
         for event, place in events
     ]
@@ -124,14 +121,12 @@ async def get_event(
             'name': place.name,
             'city': place.city,
             'address': place.address,
+            'seats_pattern': place.seats_pattern,
         },
         'event_time': event.event_time,
         'registration_deadline': event.registration_deadline,
         'status': event.status,
         'number_of_visitors': event.number_of_visitors,
-        'changed_at': event.changed_at,
-        'created_at': event.created_at,
-        'status_changed_at': event.status_changed_at,
     }
 
 @router.get('/api/events/{event_id}/seats')
