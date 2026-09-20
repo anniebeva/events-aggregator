@@ -146,9 +146,14 @@ async def get_event_seats(
 
     seats = await client.seats(cache_key)
 
+    result = {
+        'event_id': event_id,
+        'available_seats': seats,
+    }
+
     seats_cache[cache_key] = (
         time.monotonic(),
-        seats,
+        result,
     )
 
-    return seats
+    return result
