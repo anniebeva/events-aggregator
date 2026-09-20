@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     postgres_password: str
     postgres_database_name: str
 
+    events_provider_url: str
+    events_provider_api_key: str
+
     model_config = SettingsConfigDict(env_file='.env')
 
 
