@@ -9,4 +9,4 @@ COPY src ./src
 
 RUN uv sync --frozen --no-dev
 
-CMD ["uv", "run", "uvicorn", "events_aggregator.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "--no-dev", "uvicorn", "events_aggregator.main:app", "--host", "0.0.0.0", "--port", "8000"]

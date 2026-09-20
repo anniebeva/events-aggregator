@@ -1,8 +1,5 @@
 from fastapi import FastAPI
 
-from events_aggregator.core.config import settings
-
-
 app = FastAPI()
 
 

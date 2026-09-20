@@ -1,13 +1,11 @@
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from events_aggregator import models
+from alembic import context
 from events_aggregator.core.config import settings
 from events_aggregator.models.base import Base
-
 
 config = context.config
 
