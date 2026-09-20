@@ -5,6 +5,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from events_aggregator.models.event import Event
+from events_aggregator.models.place import Place
 
 
 class EventRepository:
@@ -15,20 +16,27 @@ class EventRepository:
         self.session = session
 
     async def get(self, event_id: UUID):
-        """Get an event by its ID"""
-        result = await self.session.execute(
-            select(Event).where(Event.id == event_id)
-        )
-        return result.scalar_one_or_none()
+        """Get an event with its place by ID"""
+        query = select(Event, Place).join(
+            Place,
+            Event.place_id == Place.id,
+        ).where(Event.id == event_id)
+
+        result = await self.session.execute(query)
+
+        return result.one_or_none()
 
     async def get_list(
-        self,
-        date_from: datetime | None,
-        page: int,
-        page_size: int,
+            self,
+            date_from: datetime | None,
+            page: int,
+            page_size: int,
     ):
         """Get a paginated list of events"""
-        query = select(Event)
+        query = select(Event, Place).join(
+            Place,
+            Event.place_id == Place.id,
+        )
 
         if date_from:
             query = query.where(Event.event_time >= date_from)
@@ -42,7 +50,7 @@ class EventRepository:
         query = query.offset(offset).limit(page_size)
 
         result = await self.session.execute(query)
-        events = result.scalars().all()
+        events = result.all()
 
         return events, count
 
