@@ -24,6 +24,12 @@ def get_event_repository(
 
 def get_events_provider_client() -> EventsProviderClient:
     """Create an Events Provider client"""
+    if not settings.events_provider_url:
+        raise RuntimeError('Events Provider URL is not configured')
+
+    if not settings.events_provider_api_key:
+        raise RuntimeError('Events Provider API key is not configured')
+
     return EventsProviderClient(
         settings.events_provider_url,
         settings.events_provider_api_key,
