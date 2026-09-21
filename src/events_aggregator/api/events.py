@@ -148,7 +148,7 @@ async def get_event_seats(
 
     result = {
         'event_id': event_id,
-        'available_seats': seats,
+        'available_seats': seats['seats'],
     }
 
     seats_cache[cache_key] = (
