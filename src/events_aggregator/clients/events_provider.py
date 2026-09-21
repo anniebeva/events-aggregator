@@ -1,5 +1,7 @@
 import httpx
 
+from events_aggregator.clients.exceptions import ProviderError, ProviderNotFoundError
+
 
 class EventsProviderClient:
     """Provide access to the external Events Provider API"""
@@ -11,19 +13,31 @@ class EventsProviderClient:
             headers={'x-api-key': api_key},
         )
 
+    def _handle_response(self, response: httpx.Response):
+        """Handle an Events Provider response"""
+        if response.status_code == 404:
+            raise ProviderNotFoundError
+
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as error:
+            raise ProviderError from error
+
+        return response
+
     async def events(self, changed_at: str):
         """Get events changed after the specified date"""
         response = await self.client.get(
             '/api/events/',
             params={'changed_at': changed_at},
         )
-        response.raise_for_status()
+        self._handle_response(response)
         return response.json()
 
     async def events_page(self, url: str):
         """Get an events page using the Provider pagination URL"""
         response = await self.client.get(url)
-        response.raise_for_status()
+        self._handle_response(response)
         return response.json()
 
     async def seats(self, event_id: str):
@@ -31,7 +45,7 @@ class EventsProviderClient:
         response = await self.client.get(
             f'/api/events/{event_id}/seats/',
         )
-        response.raise_for_status()
+        self._handle_response(response)
         return response.json()
 
     async def register(
@@ -52,7 +66,7 @@ class EventsProviderClient:
                 'email': email,
             },
         )
-        response.raise_for_status()
+        self._handle_response(response)
         return response.json()
 
     async def unregister(self, event_id: str, ticket_id: str):
@@ -61,7 +75,7 @@ class EventsProviderClient:
             f'/api/events/{event_id}/unregister/',
             json={'ticket_id': ticket_id},
         )
-        response.raise_for_status()
+        self._handle_response(response)
         return response.json()
 
     async def close(self):
