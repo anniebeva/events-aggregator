@@ -8,11 +8,11 @@ from events_aggregator.models.base import Base
 
 
 class Event(Base):
-    __tablename__ = 'events'
+    __tablename__ = "events"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
-    place_id: Mapped[UUID] = mapped_column(ForeignKey('places.id'))
+    place_id: Mapped[UUID] = mapped_column(ForeignKey("places.id"))
     event_time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     registration_deadline: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     status: Mapped[str] = mapped_column(String(50))

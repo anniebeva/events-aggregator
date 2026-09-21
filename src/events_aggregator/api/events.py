@@ -25,17 +25,18 @@ def get_event_repository(
 def get_events_provider_client() -> EventsProviderClient:
     """Create an Events Provider client"""
     if not settings.events_provider_url:
-        raise RuntimeError('Events Provider URL is not configured')
+        raise RuntimeError("Events Provider URL is not configured")
 
     if not settings.events_provider_api_key:
-        raise RuntimeError('Events Provider API key is not configured')
+        raise RuntimeError("Events Provider API key is not configured")
 
     return EventsProviderClient(
         settings.events_provider_url,
         settings.events_provider_api_key,
     )
 
-@router.get('/api/events')
+
+@router.get("/api/events")
 async def get_events(
     request: Request,
     date_from: datetime | None = None,
@@ -52,18 +53,18 @@ async def get_events(
 
     results = [
         {
-            'id': event.id,
-            'name': event.name,
-            'place': {
-                'id': place.id,
-                'name': place.name,
-                'city': place.city,
-                'address': place.address,
+            "id": event.id,
+            "name": event.name,
+            "place": {
+                "id": place.id,
+                "name": place.name,
+                "city": place.city,
+                "address": place.address,
             },
-            'event_time': event.event_time,
-            'registration_deadline': event.registration_deadline,
-            'status': event.status,
-            'number_of_visitors': event.number_of_visitors,
+            "event_time": event.event_time,
+            "registration_deadline": event.registration_deadline,
+            "status": event.status,
+            "number_of_visitors": event.number_of_visitors,
         }
         for event, place in events
     ]
@@ -71,12 +72,12 @@ async def get_events(
     def build_url(page_number: int):
         """Build a pagination URL for the requested page"""
         params = {
-            'page': page_number,
-            'page_size': page_size,
+            "page": page_number,
+            "page_size": page_size,
         }
 
         if date_from:
-            params['date_from'] = date_from.isoformat()
+            params["date_from"] = date_from.isoformat()
 
         return str(request.url.replace_query_params(**params))
 
@@ -91,13 +92,14 @@ async def get_events(
         previous_url = build_url(page - 1)
 
     return {
-        'count': count,
-        'next': next_url,
-        'previous': previous_url,
-        'results': results,
+        "count": count,
+        "next": next_url,
+        "previous": previous_url,
+        "results": results,
     }
 
-@router.get('/api/events/{event_id}')
+
+@router.get("/api/events/{event_id}")
 async def get_event(
     event_id: UUID,
     repository: EventRepository = Depends(get_event_repository),
@@ -108,28 +110,29 @@ async def get_event(
     if result is None:
         raise HTTPException(
             status_code=404,
-            detail='Event not found',
+            detail="Event not found",
         )
 
     event, place = result
 
     return {
-        'id': event.id,
-        'name': event.name,
-        'place': {
-            'id': place.id,
-            'name': place.name,
-            'city': place.city,
-            'address': place.address,
-            'seats_pattern': place.seats_pattern,
+        "id": event.id,
+        "name": event.name,
+        "place": {
+            "id": place.id,
+            "name": place.name,
+            "city": place.city,
+            "address": place.address,
+            "seats_pattern": place.seats_pattern,
         },
-        'event_time': event.event_time,
-        'registration_deadline': event.registration_deadline,
-        'status': event.status,
-        'number_of_visitors': event.number_of_visitors,
+        "event_time": event.event_time,
+        "registration_deadline": event.registration_deadline,
+        "status": event.status,
+        "number_of_visitors": event.number_of_visitors,
     }
 
-@router.get('/api/events/{event_id}/seats')
+
+@router.get("/api/events/{event_id}/seats")
 async def get_event_seats(
     event_id: UUID,
     client: EventsProviderClient = Depends(get_events_provider_client),
@@ -147,8 +150,8 @@ async def get_event_seats(
     seats = await client.seats(cache_key)
 
     result = {
-        'event_id': event_id,
-        'available_seats': seats['seats'],
+        "event_id": event_id,
+        "available_seats": seats["seats"],
     }
 
     seats_cache[cache_key] = (

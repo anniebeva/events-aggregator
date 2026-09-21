@@ -5,9 +5,9 @@ from events_aggregator.models.sync_metadata import SyncMetadata
 from events_aggregator.models.ticket import Ticket
 
 __all__ = [
-    'Event',
-    'Place',
-    'Registration',
-    'SyncMetadata',
-    'Ticket',
+    "Event",
+    "Place",
+    "Registration",
+    "SyncMetadata",
+    "Ticket",
 ]

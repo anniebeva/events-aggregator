@@ -14,10 +14,10 @@ class EventsPaginator:
         page = await self.client.events(self.changed_at)
 
         while page:
-            for event in page['results']:
+            for event in page["results"]:
                 yield event
 
-            if not page['next']:
+            if not page["next"]:
                 break
 
-            page = await self.client.events_page(page['next'])
+            page = await self.client.events_page(page["next"])

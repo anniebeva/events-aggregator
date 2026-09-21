@@ -29,11 +29,11 @@ def get_sync_service(
     )
 
 
-@router.post('/api/sync/trigger', status_code=200)
+@router.post("/api/sync/trigger", status_code=200)
 async def trigger_sync(
     service: SyncService = Depends(get_sync_service),
 ):
     """Trigger events synchronization"""
     await service.sync()
 
-    return {'status': 'ok'}
+    return {"status": "ok"}

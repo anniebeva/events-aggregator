@@ -19,11 +19,11 @@ async def provider_not_found_handler(
     """Handle not found errors from the Events Provider"""
     return JSONResponse(
         status_code=404,
-        content={'detail': 'Event not found'},
+        content={"detail": "Event not found"},
     )
 
 
-@app.get('/api/health')
+@app.get("/api/health")
 async def health():
     """Return application health status"""
-    return {'status': 'ok'}
+    return {"status": "ok"}

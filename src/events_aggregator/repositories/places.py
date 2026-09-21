@@ -15,9 +15,7 @@ class PlaceRepository:
 
     async def get(self, place_id: UUID):
         """Get a place by its ID"""
-        result = await self.session.execute(
-            select(Place).where(Place.id == place_id)
-        )
+        result = await self.session.execute(select(Place).where(Place.id == place_id))
         return result.scalar_one_or_none()
 
     async def create(self, place: Place):
