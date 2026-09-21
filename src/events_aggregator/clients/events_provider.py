@@ -71,7 +71,8 @@ class EventsProviderClient:
 
     async def unregister(self, event_id: str, ticket_id: str):
         """Cancel an event registration"""
-        response = await self.client.delete(
+        response = await self.client.request(
+            "DELETE",
             f"/api/events/{event_id}/unregister/",
             json={"ticket_id": ticket_id},
         )

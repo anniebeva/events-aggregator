@@ -1,6 +1,51 @@
 from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
 import pytest
+from fastapi.testclient import TestClient
+
+from events_aggregator.api.tickets import get_ticket_service
+from events_aggregator.main import app
+from events_aggregator.services.tickets import TicketService
+
+
+@pytest.fixture
+def client():
+    """Create a test client"""
+    return TestClient(app)
+
+
+@pytest.fixture
+def mock_ticket_service():
+    """Create a mocked ticket service"""
+    service = AsyncMock()
+
+    app.dependency_overrides[get_ticket_service] = lambda: service
+
+    yield service
+
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def ticket_service():
+    """Create a ticket service with mocked dependencies"""
+    provider_client = AsyncMock()
+    ticket_repository = AsyncMock()
+    registration_repository = AsyncMock()
+
+    service = TicketService(
+        client=provider_client,
+        ticket_repository=ticket_repository,
+        registration_repository=registration_repository,
+    )
+
+    return (
+        service,
+        provider_client,
+        ticket_repository,
+        registration_repository,
+    )
 
 
 @pytest.fixture

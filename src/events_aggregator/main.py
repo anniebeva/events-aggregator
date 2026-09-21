@@ -3,12 +3,14 @@ from fastapi.responses import JSONResponse
 
 from events_aggregator.api.events import router as events_router
 from events_aggregator.api.sync import router as sync_router
+from events_aggregator.api.tickets import router as tickets_router
 from events_aggregator.clients.exceptions import ProviderNotFoundError
 
 app = FastAPI()
 
 app.include_router(sync_router)
 app.include_router(events_router)
+app.include_router(tickets_router)
 
 
 @app.exception_handler(ProviderNotFoundError)
