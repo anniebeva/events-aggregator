@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from events_aggregator.api.events import router as events_router
@@ -22,6 +23,18 @@ async def provider_not_found_handler(
     return JSONResponse(
         status_code=404,
         content={"detail": "Event not found"},
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    request: Request,
+    exc: RequestValidationError,
+):
+    """Handle request validation errors"""
+    return JSONResponse(
+        status_code=400,
+        content={"detail": exc.errors()},
     )
 
 

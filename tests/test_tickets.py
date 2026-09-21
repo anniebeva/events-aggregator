@@ -123,3 +123,18 @@ def test_create_ticket_unavailable_seat(ticket_service):
         )
 
     provider_client.register.assert_not_awaited()
+
+def test_create_ticket_invalid_body(client, mock_ticket_service):
+    """Return 400 when ticket data is invalid"""
+    response = client.post(
+        '/api/tickets',
+        json={
+            'event_id': 'not-a-uuid',
+            'first_name': 'Иван',
+            'last_name': 'Иванов',
+            'email': 'x',
+            'seat': 'A15',
+        },
+    )
+
+    assert response.status_code == 400
